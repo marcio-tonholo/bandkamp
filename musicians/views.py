@@ -19,10 +19,12 @@ class MusicianDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MusicianSerializer
 
 
-
 class MusicianAlbumView(generics.ListCreateAPIView):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
+
+
+
     def perform_create(self,serializer):
         musician_id = self.request.path.split("/")[3]
         musician = get_object_or_404(Musician,id = musician_id )
@@ -31,32 +33,30 @@ class MusicianAlbumView(generics.ListCreateAPIView):
     def get_queryset(self):
         musician_id = self.request.path.split("/")[3]
         musician = get_object_or_404(Musician,id = musician_id )
+
+        route_parameter_gt = self.request.GET.get("duration_gt")
+        route_parameter_lt = self.request.GET.get("duration_lt")
+
+        if route_parameter_gt:
+            queryset = []
+            for i in  range(len(musician.albums.all())):
+                total_duration = AlbumSerializer(musician.albums.all()[i]).data["total_duration"]
+                if total_duration > int(route_parameter_gt): 
+                    queryset.append(musician.albums.all()[i])
+            return queryset
+
+        route_parameter_lt = self.request.GET.get("duration_lt")
+
+        if route_parameter_lt:
+            queryset = []
+            for i in  range(len(musician.albums.all())):
+                total_duration = AlbumSerializer(musician.albums.all()[i]).data["total_duration"]
+                if total_duration < int(route_parameter_lt): 
+                    queryset.append(musician.albums.all()[i])
+            return queryset    
+
+        
         return musician.albums.all()
-
-# class MusicianAlbumSongView(APIView):
-#     def get(self, request, musician_id, album_id):
-#         musician = get_object_by_id(Musician ,musician_id)
-#         album = get_object_by_id(Album, album_id)
-#         songs = Song.objects.filter(musician=musician, album=album)
-
-#         serializer = SongSerializer(songs, many=True)
-
-#         return Response(serializer.data)
-
-#     def post(self, request, musician_id, album_id):
-#         musician = get_object_by_id(Musician, musician_id)
-
-#         album = Album.objects.filter(musician=musician, id=album_id).first()
-
-#         if not album:
-#             return Response({'detail': 'Album not Found'}, status.HTTP_404_NOT_FOUND)
-
-#         serializer = SongSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save(album=album)
-
-#         return Response(serializer.data, status.HTTP_201_CREATED)
-
 
 
 class MusicianAlbumSongView(generics.ListCreateAPIView):

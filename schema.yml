@@ -1,0 +1,390 @@
+openapi: 3.0.3
+info:
+  title: BandKamp
+  version: 1.0.0
+  description: App to manage musicians and albums data
+paths:
+  /api/musicians/:
+    get:
+      operationId: musicians_list
+      tags:
+      - musicians
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Musician'
+          description: ''
+    post:
+      operationId: musicians_create
+      tags:
+      - musicians
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Musician'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Musician'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Musician'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Musician'
+          description: ''
+  /api/musicians/{id}/:
+    get:
+      operationId: musicians_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this musician.
+        required: true
+      tags:
+      - musicians
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Musician'
+          description: ''
+    put:
+      operationId: musicians_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this musician.
+        required: true
+      tags:
+      - musicians
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Musician'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Musician'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Musician'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Musician'
+          description: ''
+    patch:
+      operationId: musicians_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this musician.
+        required: true
+      tags:
+      - musicians
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMusician'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMusician'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMusician'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Musician'
+          description: ''
+    delete:
+      operationId: musicians_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this musician.
+        required: true
+      tags:
+      - musicians
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/musicians/{id}/albums/:
+    get:
+      operationId: musicians_albums_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this album.
+        required: true
+      tags:
+      - musicians
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+          description: ''
+    post:
+      operationId: musicians_albums_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this album.
+        required: true
+      tags:
+      - musicians
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Album'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Album'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Album'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+          description: ''
+  /api/musicians/{id}/albums/{album_id}/songs/:
+    get:
+      operationId: musicians_albums_songs_list
+      parameters:
+      - in: path
+        name: album_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this song.
+        required: true
+      tags:
+      - musicians
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Song'
+          description: ''
+    post:
+      operationId: musicians_albums_songs_create
+      parameters:
+      - in: path
+        name: album_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this song.
+        required: true
+      tags:
+      - musicians
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Song'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Song'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Song'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
+          description: ''
+components:
+  schemas:
+    Album:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        total_duration:
+          type: string
+          readOnly: true
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Song'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        musician:
+          type: integer
+          readOnly: true
+      required:
+      - id
+      - musician
+      - name
+      - songs
+      - total_duration
+    Musician:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        albums:
+          type: array
+          items:
+            $ref: '#/components/schemas/Album'
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        instrument:
+          type: string
+          maxLength: 255
+      required:
+      - albums
+      - first_name
+      - id
+      - instrument
+      - last_name
+    PatchedMusician:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        albums:
+          type: array
+          items:
+            $ref: '#/components/schemas/Album'
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        instrument:
+          type: string
+          maxLength: 255
+    Song:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        duration:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        album:
+          type: integer
+          readOnly: true
+      required:
+      - album
+      - id
+      - name
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
